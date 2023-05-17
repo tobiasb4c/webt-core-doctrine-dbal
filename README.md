@@ -9,6 +9,7 @@ https://www.youtube.com/watch?v=6yrdT5y12kA
 
 ### Acceptance Criteria
 - A plain HTML prototype exists
+- The HTML needs to be responsive 
 - The tournament name and date are listed
 - A minimum of 5 game rounds are listed (1 game round equals 1 RPS game)
 - Each game round features the player, symbol he/she picked (rock, paper, scissors), as well as date and time
