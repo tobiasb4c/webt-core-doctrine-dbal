@@ -7,9 +7,9 @@ use Doctrine\DBAL\DriverManager;
 // Create a connection to the database
 $config = new Configuration();
 $connectionParams = [
-    'dbname' => 'your_database_name',
-    'user' => 'your_username',
-    'password' => 'your_password',
+    'dbname' => 'tournament',
+    'user' => 'god',
+    'password' => 'god',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
 ];
@@ -17,7 +17,11 @@ $connection = DriverManager::getConnection($connectionParams, $config);
 
 // Insert test data
 $data = [
-    ['John', 'Jane', 'Rock', '2023-06-03 10:00:00'],
+    ['Tobi', 'Simon', 'Rock', '2023-06-03 10:00:00'],
+    ['Fabi', 'Niko', 'Paper', '2023-08-01 10:09:40'],
+    ['Domi', 'Fabi', 'Scissor', '2024-11-11 11:11:11'],
+    ['Eros', 'Sergej', 'Scissor', '2024-06-03 10:24:00'],
+    ['Eros', 'NIko', 'Rock', '2024-04-03 15:00:00'],
     // Add more test data
 ];
 

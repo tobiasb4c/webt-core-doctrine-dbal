@@ -7,6 +7,7 @@ use Doctrine\DBAL\DriverManager;
 // Create a connection to the database
 $config = new Configuration();
 $connectionParams = [
+    'dbname' => 'tournament',
     'user' => 'god',
     'password' => 'god',
     'host' => 'localhost',

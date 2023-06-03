@@ -7,12 +7,13 @@ use Doctrine\DBAL\DriverManager;
 // Create a connection to the database
 $config = new Configuration();
 $connectionParams = [
-    'dbname' => 'your_database_name',
-    'user' => 'your_username',
-    'password' => 'your_password',
+    'dbname' => 'tournament',
+    'user' => 'god',
+    'password' => 'god',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
 ];
+
 $connection = DriverManager::getConnection($connectionParams, $config);
 
 // Retrieve game rounds from the database
