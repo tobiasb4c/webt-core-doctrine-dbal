@@ -1,36 +1,29 @@
 <?php
-// delete_record.php
-require 'vendor/autoload.php';
-// Delete a record from the database using Doctrine DBAL
+require_once 'vendor/autoload.php';
+
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
+// Create a connection to the database
 $config = new Configuration();
-
-// Database configuration (replace with your own)
-$connectionParams = array(
-    'dbname' => 'tournament',
-    'user' => 'god',
-    'password' => 'god',
+$connectionParams = [
+    'dbname' => 'your_database_name',
+    'user' => 'your_username',
+    'password' => 'your_password',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
-);
-
-
+];
 $connection = DriverManager::getConnection($connectionParams, $config);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the player name to delete
-    $player = $_POST['player'];
+// Get the record ID
+$id = $_POST['id'];
 
-    // Delete the record from the database
-    $sql = "DELETE FROM game_rounds WHERE player = :player";
-    $params = ['player' => $player];
-    $types = ['player' => \PDO::PARAM_STR];
-    $connection->executeStatement($sql, $params, $types);
+// Delete the record from the database
+$connection->delete('game_rounds', ['id' => $id]);
 
-    echo 'Record deleted successfully.';
-}
+echo 'Record deleted successfully.';
+
+
 
 // Display the form for deleting a record
 $html = '

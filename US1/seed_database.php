@@ -1,36 +1,34 @@
 <?php
-// seed_database.php
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
-// Insert test data into the database using Doctrine DBAL
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
+// Create a connection to the database
 $config = new Configuration();
-
-// Database configuration (replace with your own)
-$connectionParams = array(
-    'dbname' => 'tournament',
-    'user' => 'god',
-    'password' => 'god',
+$connectionParams = [
+    'dbname' => 'your_database_name',
+    'user' => 'your_username',
+    'password' => 'your_password',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
-);
-
+];
 $connection = DriverManager::getConnection($connectionParams, $config);
 
 // Insert test data
-$sql = "
-INSERT INTO game_rounds (player, symbol, date_time)
-VALUES
-    ('John', 'rock', '2023-05-21 10:00:00'),
-    ('Alice', 'paper', '2023-05-21 11:00:00'),
-    ('Bob', 'scissors', '2023-05-21 12:00:00'),
-    ('Sarah', 'rock', '2023-05-21 13:00:00'),
-    ('Mike', 'paper', '2023-05-21 14:00:00')
-";
+$data = [
+    ['John', 'Jane', 'Rock', '2023-06-03 10:00:00'],
+    // Add more test data
+];
 
-$connection->executeStatement($sql);
+foreach ($data as $round) {
+    $connection->insert('game_rounds', [
+        'player1' => $round[0],
+        'player2' => $round[1],
+        'symbol' => $round[2],
+        'date_time' => $round[3],
+    ]);
+}
 
 echo 'Test data inserted successfully.';
 ?>

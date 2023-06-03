@@ -1,59 +1,37 @@
 <?php
-// retrieve_data.php
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
-// Retrieve data from the database using Doctrine DBAL and display in the view
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
+// Create a connection to the database
 $config = new Configuration();
-
-// Database configuration (replace with your own)
-$connectionParams = array(
-    'dbname' => 'tournament',
-    'user' => 'god',
-    'password' => 'god',
+$connectionParams = [
+    'dbname' => 'your_database_name',
+    'user' => 'your_username',
+    'password' => 'your_password',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
-);
-
+];
 $connection = DriverManager::getConnection($connectionParams, $config);
 
-// Fetch all game rounds from the database
-$sql = "SELECT * FROM game_rounds";
-$stmt = $connection->executeQuery($sql);
-$gameRounds = $stmt->fetchAllAssociative();
+// Retrieve game rounds from the database
+$queryBuilder = $connection->createQueryBuilder();
+$queryBuilder->select('*')->from('game_rounds');
+$gameRounds = $queryBuilder->execute()->fetchAll();
 
-// Display the game rounds in the view
-$html = '
-<!DOCTYPE html>
-<html>
-<head>
-    <title>USARPS Championship</title>
-    <style>
-        
-    </style>
-</head>
-<body>
-    <h1>USARPS Championship</h1>
-    <p>Tournament Name: XYZ</p>
-    <p>Date: 2023-05-21</p>
-    <h2>Game Rounds</h2>
-    <ul>';
-
-foreach ($gameRounds as $gameRound) {
-    $html .= '<li>Game ' . $gameRound['id'] . ' - Player: ' . $gameRound['player'] . ', Symbol: ' . $gameRound['symbol'] . ', Date: ' . $gameRound['date_time'] . '</li>';
+// Generate HTML to display the game rounds
+$html = '<table>';
+$html .= '<tr><th>Player 1</th><th>Player 2</th><th>Symbol</th><th>Date and Time</th></tr>';
+foreach ($gameRounds as $round) {
+    $html .= '<tr>';
+    $html .= '<td>' . $round['player1'] . '</td>';
+    $html .= '<td>' . $round['player2'] . '</td>';
+    $html .= '<td>' . $round['symbol'] . '</td>';
+    $html .= '<td>' . $round['date_time'] . '</td>';
+    $html .= '</tr>';
 }
-
-$html .= '
-    </ul>
-
-
-    <a href="./insertPage.php">Insert</a>
-    <a href="./deletePage.php">Delete</a>
-</body>
-</html>
-';
+$html .= '</table>';
 
 echo $html;
 ?>

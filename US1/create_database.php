@@ -1,39 +1,39 @@
 <?php
-// create_database.php
-require 'vendor/autoload.php';
-// Setup the database connection using Doctrine DBAL
+require_once 'vendor/autoload.php';
+
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
+// Create a connection to the database
 $config = new Configuration();
-
-// Connect to the MySQL server as the root user (adjust the connection parameters as needed)
-$connectionParamsRoot = array(
+$connectionParams = [
     'user' => 'god',
     'password' => 'god',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
-);
-
-$connectionRoot = DriverManager::getConnection($connectionParamsRoot, $config);
-
-// Create the database (replace 'your_database_name' with the desired database name)
-$databaseName = 'tournament';
-$sqlCreateDatabase = "CREATE DATABASE IF NOT EXISTS $databaseName";
-$connectionRoot->executeStatement($sqlCreateDatabase);
-
-// Connect to the newly created database
+];
 $connection = DriverManager::getConnection($connectionParams, $config);
 
-// Create the table for storing game rounds
-$sqlCreateTable = "
-CREATE TABLE IF NOT EXISTS game_rounds (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    player VARCHAR(255),
-    symbol ENUM('rock', 'paper', 'scissors'),
-    date_time DATETIME
-)";
-$connection->executeStatement($sqlCreateTable);
+// Create a schema manager
+$schemaManager = $connection->getSchemaManager();
 
-echo 'Database and table created successfully.';
+// Create a new schema
+$schema = new \Doctrine\DBAL\Schema\Schema();
+
+// Create a table for storing game rounds
+$table = $schema->createTable('game_rounds');
+$table->addColumn('id', 'integer', ['autoincrement' => true]);
+$table->addColumn('player1', 'string', ['length' => 255]);
+$table->addColumn('player2', 'string', ['length' => 255]);
+$table->addColumn('symbol', 'string', ['length' => 255]);
+$table->addColumn('date_time', 'datetime');
+$table->setPrimaryKey(['id']);
+
+// Create the table in the database
+$sql = $schema->toSql($connection->getDatabasePlatform());
+foreach ($sql as $query) {
+    $connection->executeQuery($query);
+}
+
+echo 'Table created successfully.';
 ?>
