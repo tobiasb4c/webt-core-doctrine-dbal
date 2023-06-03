@@ -4,7 +4,6 @@ require_once 'vendor/autoload.php';
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
-// Create a connection to the database
 $config = new Configuration();
 $connectionParams = [
     'dbname' => 'tournament',
@@ -15,19 +14,32 @@ $connectionParams = [
 ];
 $connection = DriverManager::getConnection($connectionParams, $config);
 
-// Get the form data
+//Form auslesen
 $player1 = $_POST['player1'];
 $player2 = $_POST['player2'];
-$symbol = $_POST['symbol'];
+$symbol1 = $_POST['symbol1'];
+$symbol2 = $_POST['symbol2'];
 $date_time = $_POST['date_time'];
 
-// Insert the data into the database
-$connection->insert('game_rounds', [
-    'player1' => $player1,
-    'player2' => $player2,
-    'symbol' => $symbol,
-    'date_time' => $date_time,
-]);
+$queryBuilder = $connection->createQueryBuilder();
 
-echo 'Record inserted successfully.';
+$queryBuilder
+    ->insert('game_rounds')
+    ->values([
+        'player1' => ':player1',
+        'player2' => ':player2',
+        'symbol1' => ':symbol1',
+        'symbol2' => ':symbol2',
+        'date_time' => ':date_time',
+    ])
+    ->setParameter('player1', $player1)
+    ->setParameter('player2', $player2)
+    ->setParameter('symbol1', $symbol1)
+    ->setParameter('symbol2', $symbol2)
+    ->setParameter('date_time', $date_time);
+
+
+$queryBuilder->execute();
+
+echo 'Inserted';
 ?>

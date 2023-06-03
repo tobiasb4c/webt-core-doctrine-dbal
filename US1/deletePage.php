@@ -4,7 +4,6 @@ require_once 'vendor/autoload.php';
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
-// Create a connection to the database
 $config = new Configuration();
 $connectionParams = [
     'dbname' => 'your_database_name',
@@ -15,11 +14,18 @@ $connectionParams = [
 ];
 $connection = DriverManager::getConnection($connectionParams, $config);
 
-// Get the record ID
+//Holt id
 $id = $_POST['id'];
 
-// Delete the record from the database
-$connection->delete('game_rounds', ['id' => $id]);
 
-echo 'Record deleted successfully.';
+$queryBuilder = $connection->createQueryBuilder();
+
+
+$queryBuilder
+    ->delete('game_rounds')
+    ->where($queryBuilder->expr()->eq('id', ':id'));// Prüft wo Expression von Querry builder (expr()) gleich (eq())
+
+$queryBuilder->execute();
+
+echo 'Gelöscht';
 ?>
